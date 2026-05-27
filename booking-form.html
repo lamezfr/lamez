@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Request — Lamez & Sub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg-card: #111111;
+    --bg-input: #161616;
+    --bg-hover: #1a1a1a;
+    --border: #222222;
+    --border-focus: #3a3a3a;
+    --accent: #c8f55a;
+    --accent-dim: rgba(200, 245, 90, 0.08);
+    --accent-text: #0a0a0a;
+    --text-primary: #f0f0f0;
+    --text-secondary: #888888;
+    --text-muted: #555555;
+    --danger: #ff6b6b;
+    --success: #c8f55a;
+    --purple: #a78bfa;
+    --purple-dim: rgba(167, 139, 250, 0.1);
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+  }
+
+  .brand span { color: var(--accent); }
+
+  .header-tag {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 2rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* FORM */
+  .form-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-family: var(--mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .span-2 { grid-column: 1 / -1; }
+
+  .field { display: flex; flex-direction: column; gap: 7px; }
+
+  .field-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .required { color: var(--accent); font-size: 14px; line-height: 1; }
+
+  .field input,
+  .field select,
+  .field textarea {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 10px 12px;
+    width: 100%;
+    transition: border-color 0.15s, background 0.15s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder { color: var(--text-muted); }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--border-focus);
+    background: #1c1c1c;
+  }
+
+  .field select { cursor: pointer; }
+
+  .field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+  /* CACHET BLOCK */
+  .cachet-block {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+
+  .cachet-input-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 1rem;
+  }
+
+  .currency-input {
+    position: relative;
+  }
+
+  .currency-input span {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-family: var(--mono);
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  .currency-input input {
+    padding-left: 28px !important;
+    font-family: var(--mono) !important;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.3px;
+  }
+
+  .fee-options { display: flex; flex-direction: column; gap: 8px; }
+
+  .fee-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    background: var(--bg);
+  }
+
+  .fee-toggle:hover { border-color: var(--border-focus); }
+  .fee-toggle input { display: none; }
+
+  .fee-toggle-left { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-secondary); }
+  .fee-toggle-left svg { width: 16px; height: 16px; opacity: 0.5; }
+
+  .fee-pct-select {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 4px !important;
+    color: var(--text-secondary) !important;
+    font-size: 12px !important;
+    padding: 3px 8px !important;
+    width: auto !important;
+    font-family: var(--mono) !important;
+  }
+
+  .fee-pill {
+    font-size: 11px;
+    font-family: var(--mono);
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--border);
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+
+  .fee-toggle.active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .fee-toggle.active .fee-toggle-left { color: var(--text-primary); }
+  .fee-toggle.active .fee-pill { background: var(--accent); color: var(--accent-text); font-weight: 500; }
+
+  /* PREVIEW */
+  .preview-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    display: none;
+  }
+
+  .preview-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .preview-row:last-child { border-bottom: none; }
+  .preview-label { color: var(--text-muted); }
+  .preview-value { font-family: var(--mono); font-weight: 500; color: var(--text-secondary); }
+  .preview-row.total .preview-label { color: var(--text-primary); font-weight: 500; }
+  .preview-row.total .preview-value { color: var(--accent); font-size: 14px; }
+  .preview-value.neg { color: var(--danger); }
+
+  /* EXTRAS */
+  .extras-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .extra-option {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    user-select: none;
+    background: var(--bg);
+  }
+
+  .extra-option input { display: none; }
+  .extra-option:hover { border-color: var(--border-focus); }
+
+  .extra-option.checked {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: var(--text-primary);
+  }
+
+  .extra-icon { font-size: 16px; }
+
+  /* SUBMIT */
+  .submit-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px 24px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent-text);
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .submit-btn:hover { opacity: 0.92; }
+  .submit-btn:active { transform: scale(0.99); }
+
+  .submit-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* SUCCESS */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 5rem 2rem;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .success-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 24px;
+  }
+
+  .success-title { font-size: 22px; font-weight: 400; margin-bottom: 10px; }
+  .success-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+  .reset-btn {
+    margin-top: 2rem;
+    padding: 10px 24px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    font-family: var(--font);
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  .reset-btn:hover { border-color: var(--border-focus); color: var(--text-primary); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1.25rem 0;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 11px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+  }
+
+  @media (max-width: 600px) {
+    .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
+    .span-2 { grid-column: 1; }
+    .extras-grid { grid-template-columns: 1fr 1fr; }
+    .hero-title { font-size: 24px; }
+    .cachet-input-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">LAMEZ <span>&amp;</span> SUB</div>
+  <div class="header-tag">Booking Request Form</div>
+</header>
+
+<div id="main-form">
+  <div class="hero">
+    <div class="hero-label">// Artist booking</div>
+    <h1 class="hero-title">Submit a booking request</h1>
+    <p class="hero-sub">Fill in all the details below. Our team will review your request and get back to you within 48 hours.</p>
+  </div>
+
+  <div class="form-wrapper">
+
+    <!-- EVENT INFO -->
+    <div class="form-card">
+      <div class="section-label">01 — Event info</div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label">Date <span class="required">*</span></label>
+          <input type="date" id="f-date">
+        </div>
+        <div class="field">
+          <label class="field-label">Country <span class="required">*</span></label>
+          <input type="text" id="f-country" placeholder="France">
+        </div>
+        <div class="field">
+          <label class="field-label">City <span class="required">*</span></label>
+          <input type="text" id="f-city" placeholder="Marseille">
+        </div>
+        <div class="field">
+          <label class="field-label">Venue / Club <span class="required">*</span></label>
+          <input type="text" id="f-venue" placeholder="Le Beau Lieu">
+        </div>
+        <div class="field">
+          <label class="field-label">Capacity</label>
+          <input type="number" id="f-capacity" placeholder="500">
+        </div>
+        <div class="field">
+          <label class="field-label">Opening hours</label>
+          <input type="text" id="f-opening" placeholder="23:00 – 06:00">
+        </div>
+        <div class="field">
+          <label class="field-label">Sound system</label>
+          <input type="text" id="f-sound" placeholder="Funktion-One, L-Acoustics K2...">
+        </div>
+        <div class="field">
+          <label class="field-label">Link to previous events</label>
+          <input type="url" id="f-link" placeholder="https://ra.co/events/...">
+        </div>
+      </div>
+    </div>
+
+    <!-- PROMOTER -->
+    <div class="form-card">
+      <div class="section-label">02 — Promoter</div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label">Promoter / Organisation <span class="required">*</span></label>
+          <input type="text" id="f-promoter" placeholder="Collectif XYZ">
+        </div>
+        <div class="field">
+          <label class="field-label">Contact email <span class="required">*</span></label>
+          <input type="email" id="f-email" placeholder="booking@xyz.com">
+        </div>
+      </div>
+    </div>
+
+    <!-- LINE-UP -->
+    <div class="form-card">
+      <div class="section-label">03 — Line-up & schedule</div>
+      <div class="form-grid">
+        <div class="field span-2">
+          <label class="field-label">Full line-up</label>
+          <textarea id="f-lineup" placeholder="List all artists on the bill..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Our artist set time</label>
+          <input type="text" id="f-settime" placeholder="02:00 – 04:00">
+        </div>
+        <div class="field">
+          <label class="field-label">Timetable (link or note)</label>
+          <input type="text" id="f-timetable" placeholder="https:// or 'attached'">
+        </div>
+      </div>
+    </div>
+
+    <!-- FEE -->
+    <div class="form-card">
+      <div class="section-label">04 — Artist fee</div>
+
+      <div class="cachet-block">
+        <div class="cachet-input-row">
+          <div class="field" style="margin:0;">
+            <label class="field-label">Artist fee (€ gross) <span class="required">*</span></label>
+            <div class="currency-input">
+              <span>€</span>
+              <input type="number" id="f-cachet" placeholder="0" oninput="updatePreview()">
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px; font-family:var(--mono);">BOOKING FEES — select which apply</div>
+
+        <div class="fee-options">
+          <label class="fee-toggle" id="toggle-lamez">
+            <input type="checkbox" id="f-fee-lamez" onchange="updatePreview()">
+            <div class="fee-toggle-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M3 7v1a3 3 0 006 0V7m0 1a3 3 0 006 0V7m0 1a3 3 0 006 0V7H3l2-4h14l2 4"/></svg>
+              Lamez — booking fee
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <select class="fee-pct-select" id="f-fee-lamez-pct" onchange="updatePreview()" onclick="e => e.stopPropagation()">
+                <option value="10">10%</option>
+                <option value="15">15%</option>
+              </select>
+              <span class="fee-pill" id="lamez-pill">—</span>
+            </div>
+          </label>
+
+          <label class="fee-toggle" id="toggle-sub">
+            <input type="checkbox" id="f-fee-sub" onchange="updatePreview()">
+            <div class="fee-toggle-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              Sub — booking fee
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-size:11px;font-family:var(--mono);color:var(--text-muted);">10%</span>
+              <span class="fee-pill" id="sub-pill">—</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="preview-box" id="preview-box">
+          <div class="preview-row"><span class="preview-label">Gross fee</span><span class="preview-value" id="pv-brut">—</span></div>
+          <div class="preview-row" id="pv-lamez-row" style="display:none;"><span class="preview-label">Lamez fee</span><span class="preview-value neg" id="pv-lamez">—</span></div>
+          <div class="preview-row" id="pv-sub-row" style="display:none;"><span class="preview-label">Sub fee</span><span class="preview-value neg" id="pv-sub">—</span></div>
+          <div class="preview-row total"><span class="preview-label">Artist net (before expenses)</span><span class="preview-value" id="pv-net">—</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px; font-family:var(--mono);">EXTRAS PROVIDED BY PROMOTER — select all that apply</div>
+        <div class="extras-grid" id="extras-grid">
+          <label class="extra-option" data-val="flights">
+            <input type="checkbox" name="extras" value="flights">
+            <span class="extra-icon">✈</span> Flights
+          </label>
+          <label class="extra-option" data-val="hotels">
+            <input type="checkbox" name="extras" value="hotels">
+            <span class="extra-icon">🏨</span> Hotels
+          </label>
+          <label class="extra-option" data-val="ground_transport">
+            <input type="checkbox" name="extras" value="ground_transport">
+            <span class="extra-icon">🚗</span> Ground transport
+          </label>
+          <label class="extra-option" data-val="rider">
+            <input type="checkbox" name="extras" value="rider">
+            <span class="extra-icon">📋</span> Rider
+          </label>
+          <label class="extra-option" data-val="meals">
+            <input type="checkbox" name="extras" value="meals">
+            <span class="extra-icon">🍽</span> Meals
+          </label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:1.25rem;">
+        <label class="field-label">Additional notes / special requests</label>
+        <textarea id="f-notes" placeholder="Technical requirements, hospitality notes, any other relevant info..."></textarea>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-section">
+      <button class="submit-btn" onclick="submitForm()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Submit booking request
+      </button>
+      <p class="submit-note">Your request will be reviewed by our booking team within 48 hours.<br>Fields marked with <span style="color:var(--accent)">*</span> are required.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="success-screen">
+  <div class="success-icon">✓</div>
+  <h2 class="success-title">Request submitted</h2>
+  <p class="success-sub">Thank you! Your booking request has been received.<br>Our team will get back to you within 48 hours at the email address provided.</p>
+  <button class="reset-btn" onclick="resetForm()">Submit another request</button>
+</div>
+
+<footer class="footer">
+  LAMEZ &amp; SUB — Booking Management — Confidential
+</footer>
+
+<script>
+  function fmt(n) { return '€' + Math.round(n).toLocaleString('fr-FR'); }
+
+  function updatePreview() {
+    const cachet = parseFloat(document.getElementById('f-cachet').value) || 0;
+    const lamezOn = document.getElementById('f-fee-lamez').checked;
+    const lamezPct = parseInt(document.getElementById('f-fee-lamez-pct').value) || 10;
+    const subOn = document.getElementById('f-fee-sub').checked;
+
+    document.getElementById('toggle-lamez').classList.toggle('active', lamezOn);
+    document.getElementById('toggle-sub').classList.toggle('active', subOn);
+
+    const lamezAmt = lamezOn ? cachet * lamezPct / 100 : 0;
+    const subAmt = subOn ? cachet * 0.10 : 0;
+    const net = cachet - lamezAmt - subAmt;
+
+    document.getElementById('lamez-pill').textContent = lamezOn && cachet ? '− ' + fmt(lamezAmt) : '—';
+    document.getElementById('sub-pill').textContent = subOn && cachet ? '− ' + fmt(subAmt) : '—';
+
+    const box = document.getElementById('preview-box');
+    if (cachet > 0) {
+      box.style.display = 'block';
+      document.getElementById('pv-brut').textContent = fmt(cachet);
+      document.getElementById('pv-lamez').textContent = '− ' + fmt(lamezAmt);
+      document.getElementById('pv-sub').textContent = '− ' + fmt(subAmt);
+      document.getElementById('pv-lamez-row').style.display = lamezOn ? 'flex' : 'none';
+      document.getElementById('pv-sub-row').style.display = subOn ? 'flex' : 'none';
+      document.getElementById('pv-net').textContent = fmt(Math.max(0, net));
+    } else {
+      box.style.display = 'none';
+    }
+  }
+
+  // Extra toggles
+  document.querySelectorAll('.extra-option').forEach(el => {
+    el.addEventListener('click', () => {
+      const cb = el.querySelector('input');
+      setTimeout(() => el.classList.toggle('checked', cb.checked), 0);
+    });
+  });
+
+  function submitForm() {
+    const required = ['f-date', 'f-country', 'f-city', 'f-venue', 'f-promoter', 'f-email'];
+    let ok = true;
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) { el.style.borderColor = '#ff6b6b'; ok = false; }
+      else el.style.borderColor = '';
+    });
+    if (!ok) { document.getElementById('f-date').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+
+    // Gather data
+    const data = {
+      date: document.getElementById('f-date').value,
+      country: document.getElementById('f-country').value,
+      city: document.getElementById('f-city').value,
+      venue: document.getElementById('f-venue').value,
+      capacity: document.getElementById('f-capacity').value,
+      opening: document.getElementById('f-opening').value,
+      sound: document.getElementById('f-sound').value,
+      link: document.getElementById('f-link').value,
+      promoter: document.getElementById('f-promoter').value,
+      email: document.getElementById('f-email').value,
+      lineup: document.getElementById('f-lineup').value,
+      settime: document.getElementById('f-settime').value,
+      timetable: document.getElementById('f-timetable').value,
+      cachet: document.getElementById('f-cachet').value,
+      feeLamez: document.getElementById('f-fee-lamez').checked,
+      feeLamezPct: document.getElementById('f-fee-lamez-pct').value,
+      feeSub: document.getElementById('f-fee-sub').checked,
+      extras: [...document.querySelectorAll('input[name="extras"]:checked')].map(e => e.value),
+      notes: document.getElementById('f-notes').value,
+    };
+
+    // Store for dashboard to pick up (localStorage key shared between files on same origin)
+    const existing = JSON.parse(localStorage.getItem('lamez_bookings') || '[]');
+    existing.unshift({ id: Date.now(), status: 'nego', frais: 0, internalNotes: '', pipeline: { contrat:'none', acompte:'none', facture:'none', solde:'none', rider:'none' }, ...data });
+    localStorage.setItem('lamez_bookings', JSON.stringify(existing));
+
+    document.getElementById('main-form').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetForm() {
+    document.getElementById('main-form').style.display = 'block';
+    document.getElementById('success-screen').style.display = 'none';
+    ['f-date','f-country','f-city','f-venue','f-capacity','f-opening','f-sound','f-link','f-promoter','f-email','f-lineup','f-settime','f-timetable','f-cachet','f-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-fee-lamez').checked = false;
+    document.getElementById('f-fee-sub').checked = false;
+    document.getElementById('toggle-lamez').classList.remove('active');
+    document.getElementById('toggle-sub').classList.remove('active');
+    document.querySelectorAll('input[name="extras"]').forEach(e => { e.checked = false; e.closest('.extra-option').classList.remove('checked'); });
+    updatePreview();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
